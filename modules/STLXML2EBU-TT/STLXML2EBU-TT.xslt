@@ -161,9 +161,12 @@ limitations under the License.
                 <xsl:when test="normalize-space(HEAD/GSI/DFC) = 'STL25.01'">
                     <xsl:value-of select="'25'"/>
                 </xsl:when>
+                <xsl:when test="normalize-space(HEAD/GSI/DFC) = 'STL50.01'">
+                    <xsl:value-of select="'50'"/>
+                </xsl:when>
                 <xsl:otherwise>
                     <xsl:message terminate="yes">
-                        Only a DFC value of 'STL25.01' is supported by this transformation.
+                        Only a DFC value of 'STL25.01' and 'STL50.01' is supported by this transformation.
                     </xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
@@ -173,6 +176,9 @@ limitations under the License.
         <xsl:variable name="frameRateMultiplier">
             <xsl:choose>
                 <xsl:when test="$frameRate = '25'">
+                    <xsl:value-of select="'1 1'"/>
+                </xsl:when>
+                <xsl:when test="$frameRate = '50'">
                     <xsl:value-of select="'1 1'"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -798,8 +804,7 @@ limitations under the License.
                         number($hours) &gt;= 0 and number($hours) &lt; 24 and
                         number($minutes) &gt;= 0 and number($minutes) &lt; 60 and
                         number($seconds) &gt;= 0 and number($seconds) &lt; 60 and
-                        number($frames) &gt;= 0 and number($frames) &lt; 25 and 
-                        $frameRate = '25'">
+                        number($frames) &gt;= 0 and number($frames) &lt; $frameRate">
                         <!--@ Calculate the correct timestamp depending on the offset given by the respective parameter -->
                         <xsl:call-template name="timestampConversion">
                             <xsl:with-param name="timeCodeFormat" select="$timeCodeFormat"/>
@@ -813,7 +818,7 @@ limitations under the License.
                     <!--@ Interrupt when the given value isn't correct for 25 frames -->
                     <xsl:otherwise>
                         <xsl:message terminate="yes">
-                            <xsl:value-of select="$fieldName"/> is always set in valid SMPTE time with format hhmmssff. This implementation only supports 25 frames.
+                            <xsl:value-of select="$fieldName"/> is always set in valid SMPTE time with format hhmmssff. This implementation only supports 25 and 50 frames.
                         </xsl:message>
                     </xsl:otherwise>
                 </xsl:choose>                    
